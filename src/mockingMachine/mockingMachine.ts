@@ -23,8 +23,8 @@ export type MocksTemplate = {
 
 type AppendMock<Mocks extends MocksTemplate> = Partial<{
 	[path in keyof Mocks as path extends `${infer before}/{${string}}${infer after}`
-		? `${before}/${string}${after}`
-		: path]: Partial<{
+	? `${before}/${string}${after}`
+	: path]: Partial<{
 		[method in keyof Mocks[path]]: Partial<{
 			[httpCode in keyof Mocks[path][method]]: Partial<
 				Mocks[path][method][httpCode]
@@ -68,8 +68,9 @@ export class MockingMachine<Mocks extends MocksTemplate = never> {
 			//@ts-expect-error - ignore -> Type 'Partial<Mocks>' is generic and can only be indexed for reading.
 			this.mocks[pathString] = pathProps;
 
-			return this;
 		}
+
+		return this;
 	}
 }
 
