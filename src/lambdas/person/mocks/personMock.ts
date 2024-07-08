@@ -6,8 +6,8 @@ personApiMocks.appendMock({
 			"200": {
 				0: {
 					budget: 200,
-					firstName: "Albert",
-					lastName: "Turon",
+					firstName: "A",
+					lastName: "T",
 					car: "Audi",
 				},
 			},
@@ -16,8 +16,8 @@ personApiMocks.appendMock({
 			"200": {
 				0: {
 					budget: 200,
-					firstName: "Albert",
-					lastName: "Turon",
+					firstName: "A",
+					lastName: "T",
 				},
 			},
 		},

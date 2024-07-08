@@ -1,3 +1,5 @@
+import { groupSimilarPaths } from "./groupSimilarPaths";
+
 type Entries<T> = {
 	[K in keyof T]: [K, T[K]];
 }[keyof T][];
@@ -16,6 +18,7 @@ type HttpMethod =
 export type MocksTemplate = {
 	[path: string]: {
 		[method in HttpMethod]?: {
+			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 			[httpCode: number]: Record<number, any>;
 		};
 	};
@@ -36,12 +39,21 @@ type AppendMock<Mocks extends MocksTemplate> = Partial<{
 export class MockingMachine<Mocks extends MocksTemplate = never> {
 	private mocks: Partial<Mocks> = {};
 	private name: string;
+	private groupedPaths: string[][] = []
 
 	constructor(name: string) {
 		this.name = name;
 	}
 
 	build() {
+		for (const group of this.groupedPaths) {
+			if (group.length <= 1) {
+				//no similar paths
+				continue
+			}
+
+			console.warn(`Multiple similar paths have been found for "${this.name}": \n${JSON.stringify(group, null, 2)}\n`)
+		}
 		return this.mocks;
 	}
 
@@ -56,6 +68,7 @@ export class MockingMachine<Mocks extends MocksTemplate = never> {
 				continue;
 			}
 
+			//exact same path has already been mocked
 			if (this.mocks[pathString]) {
 				const filename = getFilenameFromStack();
 
@@ -68,6 +81,7 @@ export class MockingMachine<Mocks extends MocksTemplate = never> {
 			//@ts-expect-error - ignore -> Type 'Partial<Mocks>' is generic and can only be indexed for reading.
 			this.mocks[pathString] = pathProps;
 
+			groupSimilarPaths(pathString, this.groupedPaths)
 		}
 
 		return this;

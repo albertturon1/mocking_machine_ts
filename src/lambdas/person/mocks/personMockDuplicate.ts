@@ -1,14 +1,25 @@
 import { personApiMocks } from "../../../mockingMachine/personApiMocks";
 
-//thi will throw an error - "/person/1000/details" has already been mocked in "personMock"
 personApiMocks.appendMock({
-	"/person/1000/details": {
+	"/person/1001/details": {
 		Get: {
 			"200": {
 				0: {
 					budget: 200,
-					firstName: "Albert",
-					lastName: "Turon",
+					firstName: "A",
+					lastName: "T",
+					car: "Audi",
+				},
+			},
+		},
+	},
+	"/person/1002/details": {
+		Get: {
+			"200": {
+				0: {
+					budget: 200,
+					firstName: "A",
+					lastName: "T",
 					car: "Audi",
 				},
 			},
